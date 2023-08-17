@@ -108,6 +108,12 @@ class RewardTrainer(Trainer):
 
             model = get_peft_model(model, peft_config)
 
+        if model.num_labels != 1:
+            raise ValueError(
+                "The reward model should be a binary classification model with 1 output neuron."
+                "You should set the `num_labels=1` in the config of your model. "
+            )
+
         if is_peft_available() and callbacks is None and isinstance(model, PeftModel):
             callbacks = [PeftSavingCallback()]
 
